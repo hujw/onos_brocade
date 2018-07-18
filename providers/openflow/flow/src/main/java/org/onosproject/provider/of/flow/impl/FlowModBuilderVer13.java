@@ -128,9 +128,9 @@ public class FlowModBuilderVer13 extends FlowModBuilder {
         List<OFInstruction> instructions = Lists.newLinkedList();
 
 
-        if (treatment.clearedDeferred()) {
-            instructions.add(factory().instructions().clearActions());
-        }
+        //if (treatment.clearedDeferred()) {
+        //    instructions.add(factory().instructions().clearActions());
+        //}
         if (!immediateActions.isEmpty()) {
             instructions.add(factory().instructions().applyActions(immediateActions));
         }
@@ -175,9 +175,9 @@ public class FlowModBuilderVer13 extends FlowModBuilder {
         if (!immediateActions.isEmpty()) {
             instructions.add(factory().instructions().applyActions(immediateActions));
         }
-        if (treatment.clearedDeferred()) {
-            instructions.add(factory().instructions().clearActions());
-        }
+        //if (treatment.clearedDeferred()) {
+        //    instructions.add(factory().instructions().clearActions());
+        //}
         if (!deferredActions.isEmpty()) {
             instructions.add(factory().instructions().writeActions(deferredActions));
         }
