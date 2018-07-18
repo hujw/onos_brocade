@@ -24,7 +24,7 @@ public enum PacketPriority {
      * High priority for control traffic. This will result in all traffic
      * matching the selector being sent to the controller.
      */
-    CONTROL(40000),
+    CONTROL(4000),
 
     /**
      * Low priority for reactive applications. Packets are only sent to the
