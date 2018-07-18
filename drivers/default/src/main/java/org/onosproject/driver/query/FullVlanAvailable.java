@@ -46,7 +46,8 @@ public class FullVlanAvailable
     }
 
     private static Set<VlanId> getEntireVlans() {
-        return IntStream.range(0, MAX_VLAN_ID)
+        //return IntStream.range(0, MAX_VLAN_ID)
+	return IntStream.range(200, 215)
                 .filter(x -> !EXCLUDED.contains(x))
                 .mapToObj(x -> VlanId.vlanId((short) x))
                 .collect(ImmutableSet.toImmutableSet());

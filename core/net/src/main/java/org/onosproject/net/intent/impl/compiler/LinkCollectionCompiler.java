@@ -318,7 +318,8 @@ public abstract class LinkCollectionCompiler<T> {
                  * If there are not labels, we cannot handle.
                  */
                 if (outLabel == null) {
-                    throw new IntentCompilationException(String.format(NO_LABELS, cp));
+                    //throw new IntentCompilationException(String.format(NO_LABELS, cp));
+		    outLabel = VlanId.vlanId((short) 202);
                 }
                 /*
                  * In the core we match using encapsulation.
@@ -818,7 +819,8 @@ public abstract class LinkCollectionCompiler<T> {
          */
         ConnectPoint inCp = new ConnectPoint(deviceId, inPort);
         if (inLabel == null) {
-            throw new IntentCompilationException(String.format(NO_LABELS, inCp));
+            //throw new IntentCompilationException(String.format(NO_LABELS, inCp));
+	    inLabel = VlanId.vlanId((short) 202);
         }
         /*
          * In the core and at egress we match using encapsulation.

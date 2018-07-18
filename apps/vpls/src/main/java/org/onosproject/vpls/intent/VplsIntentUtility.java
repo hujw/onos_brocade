@@ -62,7 +62,7 @@ public final class VplsIntentUtility {
     private static final Logger log = LoggerFactory.getLogger(
             VplsIntentUtility.class);
 
-    private static final int PRIORITY_OFFSET = 1000;
+    private static final int PRIORITY_OFFSET = 4000;
     private static final int PRIORITY_UNI = 200;
     private static final int PRIORITY_BRC = 100;
 
@@ -175,7 +175,8 @@ public final class VplsIntentUtility {
         }
         Set<Intent> uniIntents = Sets.newHashSet();
         ResourceGroup resourceGroup = ResourceGroup.of(vplsData.name());
-        hosts.forEach(host -> {
+        //hosts.forEach(host -> {
+	interfaces.forEach(host -> {
             FilteredConnectPoint hostFcp = buildFilteredConnectedPoint(host);
             Set<FilteredConnectPoint> srcFcps =
                     interfaces.stream()
@@ -185,13 +186,14 @@ public final class VplsIntentUtility {
             Key key = buildKey(PREFIX_UNICAST,
                                hostFcp.connectPoint(),
                                vplsData.name(),
-                               host.mac(),
+                               //host.mac(),
+			       MacAddress.ZERO,
                                appId);
             Intent uniIntent = buildUniIntent(key,
                                               appId,
                                               srcFcps,
                                               hostFcp,
-                                              host,
+                                              //host,
                                               vplsData.encapsulationType(),
                                               resourceGroup);
             uniIntents.add(uniIntent);
@@ -216,7 +218,7 @@ public final class VplsIntentUtility {
                                                                   ApplicationId appId,
                                                                   Set<FilteredConnectPoint> srcs,
                                                                   FilteredConnectPoint dst,
-                                                                  Host host,
+                                                                  //Host host,
                                                                   EncapsulationType encap,
                                                                   ResourceGroup resourceGroup) {
         log.debug("Building unicast intent {} for destination {}", MP2SP, dst);
@@ -224,7 +226,7 @@ public final class VplsIntentUtility {
         MultiPointToSinglePointIntent.Builder intentBuilder;
 
         TrafficSelector selector = DefaultTrafficSelector.builder()
-                .matchEthDst(host.mac())
+                //.matchEthDst(host.mac())
                 .build();
 
         intentBuilder = MultiPointToSinglePointIntent.builder()

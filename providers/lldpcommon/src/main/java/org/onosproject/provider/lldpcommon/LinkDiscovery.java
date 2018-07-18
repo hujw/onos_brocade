@@ -71,6 +71,8 @@ public class LinkDiscovery implements TimerTask {
 
     // Set of ports to be probed
     private final Map<Long, String> portMap = Maps.newConcurrentMap();
+    // Set default management vlan
+    private short default_vlan = 4092;
     /**
      * Instantiates discovery manager for the given physical switch. Creates a
      * generic LLDP packet that will be customized for the port it is sent out on.
@@ -84,11 +86,15 @@ public class LinkDiscovery implements TimerTask {
         this.context = context;
 
         ethPacket = new Ethernet();
+	// must tag vlan when using the VPLS path
+	ethPacket.setVlanID(Short.valueOf(default_vlan));
         ethPacket.setEtherType(Ethernet.TYPE_LLDP);
         ethPacket.setDestinationMACAddress(MacAddress.ONOS_LLDP);
         ethPacket.setPad(true);
 
         bddpEth = new Ethernet();
+	// must tag vlan when using the VPLS path
+	bddpEth.setVlanID(Short.valueOf(default_vlan));
         bddpEth.setEtherType(Ethernet.TYPE_BSN);
         bddpEth.setDestinationMACAddress(MacAddress.BROADCAST);
         bddpEth.setPad(true);

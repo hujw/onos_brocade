@@ -211,10 +211,19 @@ public final class LabelAllocator {
 
     // Given a link and a encapsulation type, returns a set of candidates
     private Set<Identifier<?>> getCandidates(LinkKey link, EncapsulationType type) {
+	VlanId vid = VlanId.vlanId((short) 201);
         // Available ids on src port
-        Set<Identifier<?>> availableIDsatSrc = getAvailableIDs(link.src(), type);
+        Set<Identifier<?>> availableIDsatSrc = //getAvailableIDs(link.src(), type);
+			getAvailableIDs(link.src(), type).stream()
+			.map(v -> ((VlanId) v))
+			.filter(v -> v.id().equals(vid.id()))
+			.collect(Collectors.toSet());
         // Available ids on dst port
-        Set<Identifier<?>> availableIDsatDst = getAvailableIDs(link.dst(), type);
+        Set<Identifier<?>> availableIDsatDst = //getAvailableIDs(link.dst(), type);
+			getAvailableIDs(link.dst(), type).stream()
+			.map(v -> ((VlanId) v))
+			.filter(v -> v.id().equals(vid.id()))
+			.collect(Collectors.toSet());
         // Create the candidate set doing an intersection of the previous sets
         return Sets.intersection(availableIDsatSrc, availableIDsatDst);
     }
@@ -381,18 +390,20 @@ public final class LabelAllocator {
         if (availableIds.isEmpty()) {
             return Collections.emptyMap();
         }
-
+	//VlanId VLAN200 = VlanId.vlanId((short) 200);
         Set<Resource> resources = availableIds.entrySet().stream()
                 .flatMap(x -> Stream.of(
                         Resources.discrete(
                                 x.getKey().src().deviceId(),
                                 x.getKey().src().port(),
                                 x.getValue()
+				//VLAN200
                         ).resource(),
                         Resources.discrete(
                                 x.getKey().dst().deviceId(),
                                 x.getKey().dst().port(),
                                 x.getValue()
+				//VLAN200
                         ).resource()
                 ))
                 .collect(Collectors.toSet());

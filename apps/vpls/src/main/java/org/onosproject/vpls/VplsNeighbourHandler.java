@@ -150,7 +150,8 @@ public class VplsNeighbourHandler {
                     .filter(intf -> !context.inPort().equals(intf.connectPoint()))
                     .forEach(context::forward);
         } else {
-            log.warn(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
+            //log.warn(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
+	    log.debug(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
             context.drop();
         }
     }
@@ -180,7 +181,8 @@ public class VplsNeighbourHandler {
         } else {
             // this might be happened when we remove an interface from VPLS
             // just ignore this message
-            log.warn(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
+            //log.warn(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
+	    log.debug(CAN_NOT_FIND_VPLS, context.inPort(), context.vlan());
             context.drop();
         }
     }
