@@ -1,9 +1,9 @@
 # NCHC SDN-IP Deployment
 
-export ONOS_NIC=211.x.x.*
-export OC1=""
+export ONOS_NIC=211.73.95.*
+export OC1="211.73.95.36"
 export ONOS_APPS="drivers,openflow"
-export OCI="211.x.x.x"
+export OCI="211.73.95.36"
 export ONOS_GROUP=nchc
 export ONOS_USER=nchc
 export ONOS_USE_SSH=false
