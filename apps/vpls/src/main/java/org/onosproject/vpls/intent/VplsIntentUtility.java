@@ -299,7 +299,7 @@ public final class VplsIntentUtility {
         // if the new encapsulation is different from NONE, a new encapsulation
         // constraint should be added to the list
         if (!encap.equals(NONE)) {
-            newConstraints.add(new EncapsulationConstraint(encap));
+            newConstraints.add(new EncapsulationConstraint(encap, (short)200));
         }
 
         // Submit new constraint list as immutable list

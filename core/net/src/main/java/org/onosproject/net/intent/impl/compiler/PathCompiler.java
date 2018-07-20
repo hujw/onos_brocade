@@ -112,7 +112,8 @@ public class PathCompiler<T> {
      */
     private void manageVlanEncap(PathCompilerCreateFlow<T> creator, List<T> flows,
                                  List<DeviceId> devices,
-                                 PathIntent intent) {
+                                 PathIntent intent,
+				 VlanId vid) {
 
         Set<Link> linksSet = Sets.newConcurrentHashSet();
         for (int i = 1; i <= intent.path().links().size() - 2; i++) {
@@ -122,7 +123,8 @@ public class PathCompiler<T> {
         Map<LinkKey, Identifier<?>> vlanIds = labelAllocator.assignLabelToLinks(
                 linksSet,
                 intent.key(),
-                EncapsulationType.VLAN
+                EncapsulationType.VLAN,
+		vid
         );
 
         Iterator<Link> links = intent.path().links().iterator();
@@ -369,7 +371,7 @@ public class PathCompiler<T> {
                 .map(type -> {
                     switch (type) {
                         case VLAN:
-                            manageVlanEncap(creator, flows, devices, intent);
+                            manageVlanEncap(creator, flows, devices, intent, encapConstraint.get().vlanId());
                             break;
                         case MPLS:
                              manageMplsEncap(creator, flows, devices, intent);

@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Optional;
 
 /**
  * Helper class which interacts with the ResourceService and provides
@@ -211,19 +212,21 @@ public final class LabelAllocator {
 
     // Given a link and a encapsulation type, returns a set of candidates
     private Set<Identifier<?>> getCandidates(LinkKey link, EncapsulationType type) {
-	VlanId vid = VlanId.vlanId((short) 201);
+	//VlanId vid = VlanId.vlanId((short) 201);
         // Available ids on src port
-        Set<Identifier<?>> availableIDsatSrc = //getAvailableIDs(link.src(), type);
+	Set<Identifier<?>> availableIDsatSrc = getAvailableIDs(link.src(), type);
+        /*Set<Identifier<?>> availableIDsatSrc = //getAvailableIDs(link.src(), type);
 			getAvailableIDs(link.src(), type).stream()
 			.map(v -> ((VlanId) v))
 			.filter(v -> v.id().equals(vid.id()))
-			.collect(Collectors.toSet());
+			.collect(Collectors.toSet()); */
         // Available ids on dst port
-        Set<Identifier<?>> availableIDsatDst = //getAvailableIDs(link.dst(), type);
+	Set<Identifier<?>> availableIDsatDst = getAvailableIDs(link.dst(), type);
+        /*Set<Identifier<?>> availableIDsatDst = //getAvailableIDs(link.dst(), type);
 			getAvailableIDs(link.dst(), type).stream()
 			.map(v -> ((VlanId) v))
 			.filter(v -> v.id().equals(vid.id()))
-			.collect(Collectors.toSet());
+			.collect(Collectors.toSet());*/
         // Create the candidate set doing an intersection of the previous sets
         return Sets.intersection(availableIDsatSrc, availableIDsatDst);
     }
@@ -380,13 +383,22 @@ public final class LabelAllocator {
      */
     public Map<LinkKey, Identifier<?>> assignLabelToLinks(Set<Link> links,
                                                           ResourceConsumer resourceConsumer,
-                                                          EncapsulationType type) {
+                                                          EncapsulationType type,
+							  VlanId... vid) {
         // To preserve order of the links. This is important for MIN_SWAP behavior
         Set<LinkKey> linkRequest = links.stream()
                 .map(LinkKey::linkKey)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        Map<LinkKey, Identifier<?>> availableIds = findAvailableIDs(linkRequest, type);
+        //Map<LinkKey, Identifier<?>> availableIds = findAvailableIDs(linkRequest, type);
+        Map<LinkKey, Identifier<?>> availableIds = Maps.newHashMap();
+        if (vid.length == 1) {
+            for (LinkKey key : linkRequest) {
+                availableIds.put(key, vid[0]);
+            }
+        } else {
+            availableIds = findAvailableIDs(linkRequest, type);
+        }
         if (availableIds.isEmpty()) {
             return Collections.emptyMap();
         }

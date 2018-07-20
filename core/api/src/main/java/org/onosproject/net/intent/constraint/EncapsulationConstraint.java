@@ -20,6 +20,7 @@ package org.onosproject.net.intent.constraint;
 import org.onosproject.net.EncapsulationType;
 import org.onosproject.net.Link;
 import org.onosproject.net.intent.ResourceContext;
+import org.onlab.packet.VlanId;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,6 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class EncapsulationConstraint extends BooleanConstraint {
 
     private EncapsulationType encapType;
+    private VlanId vlanId;
 
     /**
      * Creates a new encapsulation constraint.
@@ -37,10 +39,22 @@ public class EncapsulationConstraint extends BooleanConstraint {
      * @param encapType the encapsulation type {@link EncapsulationType}
      */
     public EncapsulationConstraint(EncapsulationType encapType) {
-        checkNotNull(encapType, "EncapsulationType cannot be null");
-        this.encapType = encapType;
+        //checkNotNull(encapType, "EncapsulationType cannot be null");
+        //this.encapType = encapType;
+	this(encapType, VlanId.NO_VID);
     }
 
+    /**
+     * Creates a new encapsulation constraint.
+     *
+     * @param encapType the encapsulation type {@link EncapsulationType}
+     * @param vlanId the vlan id {@link VlanId}
+     */
+    public EncapsulationConstraint(EncapsulationType encapType, short vid) {
+        //checkNotNull(encapType, "EncapsulationType cannot be null");
+        this.encapType = encapType;
+	this.vlanId = VlanId.vlanId(vid);
+    }
 
     // doesn't use LinkResourceService
     @Override
@@ -59,6 +73,13 @@ public class EncapsulationConstraint extends BooleanConstraint {
     public EncapsulationType encapType() {
         return encapType;
     }
+
+    /**
+     * Returns the vlan id required by this constraint.
+     *
+     * @return vlanId
+     */
+    public VlanId vlanId() { return vlanId; } 
 
     @Override
     public int hashCode() {

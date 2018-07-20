@@ -258,12 +258,21 @@ public abstract class LinkCollectionCompiler<T> {
          * for this iteration;
          */
         } else {
-            Identifier<?> inLabel = labels.get(new ConnectPoint(deviceId, inPort));
+            Identifier<?> inLabel = null;
             Map<ConnectPoint, Identifier<?>> outLabels = Maps.newHashMap();
-            outPorts.forEach(outPort -> {
-                ConnectPoint key = new ConnectPoint(deviceId, outPort);
-                outLabels.put(key, labels.get(key));
-            });
+            if (encapConstraint.get().vlanId().toShort() != VlanId.NO_VID) {
+		inLabel = encapConstraint.get().vlanId();
+                outPorts.forEach(outPort -> {
+                    ConnectPoint key = new ConnectPoint(deviceId, outPort);
+                    outLabels.put(key, encapConstraint.get().vlanId());
+                });
+            } else {
+		inLabel = labels.get(new ConnectPoint(deviceId, inPort));	
+                outPorts.forEach(outPort -> {
+                    ConnectPoint key = new ConnectPoint(deviceId, outPort);
+                    outLabels.put(key, labels.get(key));
+                });
+            }
             instructions = this.createForwardingInstructions(
                     intent,
                     inPort,
@@ -318,8 +327,8 @@ public abstract class LinkCollectionCompiler<T> {
                  * If there are not labels, we cannot handle.
                  */
                 if (outLabel == null) {
-                    //throw new IntentCompilationException(String.format(NO_LABELS, cp));
-		    outLabel = VlanId.vlanId((short) 202);
+                    throw new IntentCompilationException(String.format(NO_LABELS, cp));
+		    //outLabel = VlanId.vlanId((short) 202);
                 }
                 /*
                  * In the core we match using encapsulation.
@@ -819,8 +828,8 @@ public abstract class LinkCollectionCompiler<T> {
          */
         ConnectPoint inCp = new ConnectPoint(deviceId, inPort);
         if (inLabel == null) {
-            //throw new IntentCompilationException(String.format(NO_LABELS, inCp));
-	    inLabel = VlanId.vlanId((short) 202);
+            throw new IntentCompilationException(String.format(NO_LABELS, inCp));
+	    //inLabel = VlanId.vlanId((short) 202);
         }
         /*
          * In the core and at egress we match using encapsulation.
