@@ -303,11 +303,11 @@ public final class VplsIntentUtility {
         // if the new encapsulation is different from NONE, a new encapsulation
         // constraint should be added to the list
         if (!encap.equals(NONE)) {
-	    /*if ((vlanId != VlanId.UNTAGGED) && (vlanId != VlanId.NO_VID))
+	    if ((vlanId != VlanId.UNTAGGED) && (vlanId != VlanId.NO_VID))
                 newConstraints.add(new EncapsulationConstraint(encap, vlanId));
 	    else
-		newConstraints.add(new EncapsulationConstraint(encap));*/
-		newConstraints.add(new EncapsulationConstraint(encap, (short)200));
+		newConstraints.add(new EncapsulationConstraint(encap));
+		//newConstraints.add(new EncapsulationConstraint(encap, (short)200));
         }
 
         // Submit new constraint list as immutable list

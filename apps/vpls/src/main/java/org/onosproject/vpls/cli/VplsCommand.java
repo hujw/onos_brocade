@@ -328,7 +328,7 @@ public class VplsCommand extends AbstractShellCommand {
         }
         vpls.setEncapsulationType(vplsData, encapType);
 	
-	if ((vlanId != null) && (vlanId.isEmpty())) {
+	if ((vlanId != null) && (!vlanId.isEmpty())) {
 	    VlanId vid = VlanId.vlanId(vlanId);
             vpls.setVlanId(vplsData, vid.toShort());
         }
