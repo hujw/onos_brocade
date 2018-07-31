@@ -65,6 +65,14 @@ public interface Vpls {
     void setEncapsulationType(VplsData vplsData, EncapsulationType encapsulationType);
 
     /**
+     * Sets an encapsulation vlan id for a VPLS.
+     *
+     * @param vplsData the VPLS for which the encapsulation vlan has to be set
+     * @param vlanId the encapsulation vlan id
+     */
+    void setVlanId(VplsData vplsData, short vlanId);
+
+    /**
      * Retrieves a VPLS.
      *
      * @param vplsName the name of the VPLS

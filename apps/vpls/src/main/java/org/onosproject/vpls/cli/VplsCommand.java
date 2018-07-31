@@ -18,6 +18,7 @@ package org.onosproject.vpls.cli;
 import com.google.common.collect.ImmutableSet;
 import org.apache.karaf.shell.commands.Argument;
 import org.apache.karaf.shell.commands.Command;
+import org.onlab.packet.VlanId;
 import org.onosproject.cli.AbstractShellCommand;
 import org.onosproject.net.intf.Interface;
 import org.onosproject.net.intf.InterfaceService;
@@ -118,6 +119,11 @@ public class VplsCommand extends AbstractShellCommand {
             required = false, multiValued = false)
     String optArg = null;
 
+    @Argument(index = 3, name = "vlanId",
+            description = "VLAN Id of the encapsulation",
+            required = false, multiValued = false)
+    private String vlanId = null;
+
     @Override
     protected void execute() {
         if (vpls == null) {
@@ -146,7 +152,7 @@ public class VplsCommand extends AbstractShellCommand {
                     removeIface(vplsName, optArg);
                     break;
                 case SET_ENCAP:
-                    setEncap(vplsName, optArg);
+                    setEncap(vplsName, optArg, vlanId);
                     break;
                 case SHOW:
                     show(vplsName);
@@ -300,7 +306,7 @@ public class VplsCommand extends AbstractShellCommand {
      * @param vplsName the name of the VPLS
      * @param encap the encapsulation type
      */
-    protected void setEncap(String vplsName, String encap) {
+    protected void setEncap(String vplsName, String encap, String vlanId) {
         if (vplsName == null) {
             print(INSERT_VPLS_NAME);
             return;
@@ -321,6 +327,11 @@ public class VplsCommand extends AbstractShellCommand {
             return;
         }
         vpls.setEncapsulationType(vplsData, encapType);
+	
+	if ((vlanId != null) && (vlanId.isEmpty())) {
+	    VlanId vid = VlanId.vlanId(vlanId);
+            vpls.setVlanId(vplsData, vid.toShort());
+        }
     }
 
     /**

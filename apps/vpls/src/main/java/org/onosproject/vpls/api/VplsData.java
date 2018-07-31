@@ -48,6 +48,7 @@ public final class VplsData {
     private Set<Interface> interfaces;
     private EncapsulationType encapsulationType;
     private VplsState state;
+    private short usedVlanId;
 
     /**
      * Constructs a VPLS data by given name and encapsulation type.
@@ -101,6 +102,7 @@ public final class VplsData {
         VplsData vplsDataCopy = new VplsData(vplsData.name(), vplsData.encapsulationType());
         vplsDataCopy.state(vplsData.state());
         vplsDataCopy.addInterfaces(vplsData.interfaces());
+	vplsDataCopy.setVlanId(vplsData.vlanId());
         return vplsData;
     }
 
@@ -119,6 +121,10 @@ public final class VplsData {
 
     public EncapsulationType encapsulationType() {
         return encapsulationType;
+    }
+
+    public short vlanId() {
+	return usedVlanId; 
     }
 
     public void addInterfaces(Collection<Interface> interfaces) {
@@ -145,6 +151,10 @@ public final class VplsData {
         this.encapsulationType = encapType;
     }
 
+    public void setVlanId(short vlanId) {
+	this.usedVlanId = vlanId;
+    }
+
     public VplsState state() {
         return state;
     }
@@ -160,6 +170,7 @@ public final class VplsData {
                 .add("interfaces", interfaces)
                 .add("encap type", encapsulationType)
                 .add("state", state)
+		.add("vlanId", usedVlanId)
                 .toString();
     }
 
@@ -174,11 +185,12 @@ public final class VplsData {
         VplsData other = (VplsData) obj;
         return Objects.equals(other.name, this.name) &&
                 Objects.equals(other.interfaces, this.interfaces) &&
-                Objects.equals(other.encapsulationType, this.encapsulationType);
+                Objects.equals(other.encapsulationType, this.encapsulationType) && 
+		Objects.equals(other.usedVlanId, this.usedVlanId);	
     }
 
     @Override
     public int hashCode() {
-        return hash(name, interfaces, encapsulationType);
+        return hash(name, interfaces, encapsulationType, usedVlanId);
     }
 }

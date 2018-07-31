@@ -141,6 +141,19 @@ public class VplsManager implements Vpls {
     }
 
     @Override
+    public void setVlanId(VplsData vplsData, short vlanId) {
+        requireNonNull(vplsData);
+        requireNonNull(vlanId);
+        VplsData newData = VplsData.of(vplsData);
+        if (newData.vlanId() == vlanId) {
+            // vlan tag is not changed.
+            return;
+        }
+        newData.setVlanId(vlanId);
+        updateVplsStatus(newData, VplsData.VplsState.UPDATING);
+    }
+
+    @Override
     public VplsData getVpls(String vplsName) {
         requireNonNull(vplsName);
         return vplsStore.getVpls(vplsName);

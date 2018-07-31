@@ -113,6 +113,7 @@ public final class VplsIntentUtility {
                                               srcFcp,
                                               dstFcps,
                                               vplsData.encapsulationType(),
+					      vplsData.vlanId(), 
                                               resourceGroup);
 
             brcIntents.add(brcIntent);
@@ -136,6 +137,7 @@ public final class VplsIntentUtility {
                                                                   FilteredConnectPoint src,
                                                                   Set<FilteredConnectPoint> dsts,
                                                                   EncapsulationType encap,
+								  short vlanId,
                                                                   ResourceGroup resourceGroup) {
         log.debug("Building broadcast intent {} for source {}", SP2MP, src);
 
@@ -155,7 +157,7 @@ public final class VplsIntentUtility {
                 .priority(PRIORITY_OFFSET + PRIORITY_BRC)
                 .resourceGroup(resourceGroup);
 
-        setEncap(intentBuilder, PARTIAL_FAILURE_CONSTRAINT, encap);
+        setEncap(intentBuilder, PARTIAL_FAILURE_CONSTRAINT, encap, vlanId);
 
         return intentBuilder.build();
     }
@@ -195,6 +197,7 @@ public final class VplsIntentUtility {
                                               hostFcp,
                                               //host,
                                               vplsData.encapsulationType(),
+					      vplsData.vlanId(),
                                               resourceGroup);
             uniIntents.add(uniIntent);
         });
@@ -220,6 +223,7 @@ public final class VplsIntentUtility {
                                                                   FilteredConnectPoint dst,
                                                                   //Host host,
                                                                   EncapsulationType encap,
+								  short vlanId,
                                                                   ResourceGroup resourceGroup) {
         log.debug("Building unicast intent {} for destination {}", MP2SP, dst);
 
@@ -239,7 +243,7 @@ public final class VplsIntentUtility {
                 .priority(PRIORITY_OFFSET + PRIORITY_UNI)
                 .resourceGroup(resourceGroup);
 
-        setEncap(intentBuilder, PARTIAL_FAILURE_CONSTRAINT, encap);
+        setEncap(intentBuilder, PARTIAL_FAILURE_CONSTRAINT, encap, vlanId);
 
         return intentBuilder.build();
     }
@@ -286,7 +290,7 @@ public final class VplsIntentUtility {
      */
     public static void setEncap(ConnectivityIntent.Builder builder,
                                 List<Constraint> constraints,
-                                EncapsulationType encap) {
+                                EncapsulationType encap, short vlanId) {
         // Constraints might be an immutable list, so a new modifiable list
         // is created
         List<Constraint> newConstraints = new ArrayList<>(constraints);
@@ -299,7 +303,11 @@ public final class VplsIntentUtility {
         // if the new encapsulation is different from NONE, a new encapsulation
         // constraint should be added to the list
         if (!encap.equals(NONE)) {
-            newConstraints.add(new EncapsulationConstraint(encap, (short)200));
+	    /*if ((vlanId != VlanId.UNTAGGED) && (vlanId != VlanId.NO_VID))
+                newConstraints.add(new EncapsulationConstraint(encap, vlanId));
+	    else
+		newConstraints.add(new EncapsulationConstraint(encap));*/
+		newConstraints.add(new EncapsulationConstraint(encap, (short)200));
         }
 
         // Submit new constraint list as immutable list
