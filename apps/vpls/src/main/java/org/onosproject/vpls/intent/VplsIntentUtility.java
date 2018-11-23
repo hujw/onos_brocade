@@ -144,7 +144,8 @@ public final class VplsIntentUtility {
         SinglePointToMultiPointIntent.Builder intentBuilder;
 
         TrafficSelector selector = DefaultTrafficSelector.builder()
-                .matchEthDst(MacAddress.BROADCAST)
+                //.matchEthDst(MacAddress.BROADCAST)
+		.matchEthType(Ethernet.TYPE_ARP)
                 .build();
 
         intentBuilder = SinglePointToMultiPointIntent.builder()
