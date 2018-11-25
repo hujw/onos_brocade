@@ -64,8 +64,8 @@ public final class VplsIntentUtility {
             VplsIntentUtility.class);
 
     private static final int PRIORITY_OFFSET = 4000;
-    private static final int PRIORITY_UNI = 200;
-    private static final int PRIORITY_BRC = 100;
+    private static final int PRIORITY_UNI = 100;
+    private static final int PRIORITY_BRC = 200;
 
     public static final String PREFIX_BROADCAST = "brc";
     public static final String PREFIX_UNICAST = "uni";
