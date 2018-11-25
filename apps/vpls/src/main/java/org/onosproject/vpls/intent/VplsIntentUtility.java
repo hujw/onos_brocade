@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.onlab.packet.MacAddress;
 import org.onlab.packet.VlanId;
+import org.onlab.packet.Ethernet;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.net.intf.Interface;
 import org.onosproject.net.ConnectPoint;
